@@ -100,7 +100,7 @@ void TM1638plus::displayIntNum(unsigned long number, boolean leadingZeros, Align
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble.
 */
-void TM1638plus::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, boolean leadingZeros, AlignTextType_e TextAlignment )
+void TM1638plus::displayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, boolean leadingZeros, AlignTextType_e TextAlignment )
 {
 	char valuesUpper[TM_DISPLAY_SIZE + 1];
 	char valuesLower[TM_DISPLAY_SIZE/2 + 1];
@@ -126,7 +126,7 @@ void TM1638plus::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower
 /*!
 	@brief Display a text string  on display
 	@param text    pointer to a character array
-	@note 
+	@note
 		Dots are removed from string and dot on preceding digit switched on
 		"abc.def" will be shown as "abcdef" with c decimal point turned on.
 */
@@ -146,8 +146,8 @@ void TM1638plus::displayText(const char *text) {
 
 /*!
 	@brief Display an ASCII character with decimal point turned on
-	@param position The position on display 0-7 
-	@param ascii The ASCII value from font table  to display 
+	@param position The position on display 0-7
+	@param ascii The ASCII value from font table  to display
 */
 void TM1638plus::displayASCIIwDot(uint8_t position, uint8_t ascii) {
 		// add 128 or 0x080 0b1000000 to turn on decimal point/dot in seven seg
@@ -156,8 +156,8 @@ void TM1638plus::displayASCIIwDot(uint8_t position, uint8_t ascii) {
 
 /*!
 	@brief Display an ASCII character on display
-	@param position The position on display 0-7  
-	@param ascii The ASCII value from font table  to display 
+	@param position The position on display 0-7
+	@param ascii The ASCII value from font table  to display
 */
 void TM1638plus::displayASCII(uint8_t position, uint8_t ascii) {
 	display7Seg(position, pgm_read_byte(pFontSevenSegptr + (ascii - TM_ASCII_OFFSET)));
@@ -165,11 +165,11 @@ void TM1638plus::displayASCII(uint8_t position, uint8_t ascii) {
 
 /*!
 	@brief  Send seven segment value to seven segment
-	@param position The position on display 0-7  
-	@param value  byte of data corresponding to segments (dp)gfedcba 
+	@param position The position on display 0-7
+	@param value  byte of data corresponding to segments (dp)gfedcba
 	@note 	0b01000001 in value will set g and a on.
 */
-void TM1638plus::display7Seg(uint8_t position, uint8_t value) { 
+void TM1638plus::display7Seg(uint8_t position, uint8_t value) {
 	sendCommand(TM_WRITE_LOC);
 	digitalWrite(_STROBE_IO, LOW);
 	sendData(TM_SEG_ADR + (position << 1));
@@ -179,7 +179,7 @@ void TM1638plus::display7Seg(uint8_t position, uint8_t value) {
 
  /*!
 	@brief  Send Hexadecimal value to seven segment
-	@param position The position on display 0-7  
+	@param position The position on display 0-7
 	@param hex  hexadecimal  value (DEC) 0-15  (0x00 - 0x0F)
 */
 void TM1638plus::displayHex(uint8_t position, uint8_t hex)

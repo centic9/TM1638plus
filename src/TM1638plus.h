@@ -36,7 +36,7 @@ public:
 	void displayHex(uint8_t position, uint8_t hex);
 	void display7Seg(uint8_t position, uint8_t value);
 	void displayIntNum(unsigned long number, boolean leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, boolean leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
+	void displayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, boolean leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
 
 private:
 
