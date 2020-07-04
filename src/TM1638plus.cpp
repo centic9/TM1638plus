@@ -89,7 +89,7 @@ void TM1638plus::displayIntNum(unsigned long number, boolean leadingZeros)
 }
 
 
-void TM1638plus::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, boolean leadingZeros)
+void TM1638plus::displayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, boolean leadingZeros)
 {
   char valuesUpper[TM_DISPLAY_SIZE + 1];
   char valuesLower[TM_DISPLAY_SIZE/2 + 1];

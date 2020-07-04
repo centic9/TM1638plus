@@ -76,7 +76,7 @@ public:
 	//Divides the display into two nibbles and displays a Decimal number in each.
 	//takes in two numbers 0-9999 for each nibble ,  and byte for decimal point display,
 	//and leading zeros optional
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, boolean leadingZeros = true);
+	void displayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, boolean leadingZeros = true);
 	
 	  // Set the LEDs. passed one  16bit integer.
 	  // MODEL 3:
