@@ -52,3 +52,24 @@
 * Version 1.8.0 November 2021 
 	* Minor update 
 	* Some users (two) have reported the high frequency shiftIn  function does not work fully with some micro-controller boards at high frequency(ESP32 240Mhz) and the fix is minor adjustment to sequence in said function. Never saw the issue in my testing. The change makes  the function sequence similar to the official Arduino shiftIn function structure in the Arduino Core (wiring.shift.c) ,  See issue 16 on github for full details.
+
+* Version 1.9.0 November 2022
+	* Change made to Model 1/3 displayHex method as per pull request #19.
+	* Right aligned text mode added to (as per pull request #17)
+		* Model 1/3,  methods displayIntNum and DisplayDecNumNibble
+		* Model  2 , methods DisplayDecNum, DisplayDecNumNibble & DisplayHexNum
+		* Previously it was just Left aligned text and added leading zeros.
+	
+* Version 2.0.0 April 2023
+	* Removed Bug (that had no effect on program output ) github issue 22
+	* Refactored class structure. 
+	* Added Example file TM1638plus_BUTTON_Model1.
+	* Added "Doxyen" style comments in order to use "Doxygen" software to automatically 
+		generate a html based software API. 
+
+* Version 2.0.1 November 2024 
+	* Minor update, change to examples files only. Removed some new compiler warnings
+	and added a 'yield()' statement to scroll tests as the  watch dog timer was crashing ESP8266 during scroll loop, noticed during debugging of [github issue 24](https://github.com/gavinlyonsrepo/TM1638plus/issues/24)
+
+* Version 2.1.0 July 2025
+	* Added support for TM1637. 

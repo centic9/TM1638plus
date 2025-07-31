@@ -1,49 +1,47 @@
-/*
-  Project Name: TM1638
-  File: TM1638plus_TEST.ino
-  Description: demo file library for  TM1638 module(8 bicolour green and red LEDs & 8 pushbuttons). 
-  Called Model 3 in this library.  This model is labelled LKM1638 or tm1638 v1.3
-  Carries out series of tests demonstrating arduino library TM1638plus.
-
-  TESTS
-  TEST 0 Reset
-  TEST 1 Brightness
-  TEST 2 ASCII display
-  TEST 3 Set a single segment
-  TEST 4 Hex digits
-  TEST 5 Text String with Decimal point
-  TEST 6 TEXT + ASCII combo
-  TEST 7 Integer Decimal number
-  TEST 8 Text String + Float
-  TEST 9 Text String + decimal number
-  TEST 10 Multiple dots
-  TEST 11 Display Overflow
-  TEST 12 Scrolling text
-  TEST 13 Green + red LEDS, setLED and setLEDs functions.
-  TEST 14 Buttons to serial monitor
-
-  Author: Gavin Lyons.
-  Created May 2019
-  URL: https://github.com/gavinlyonsrepo/TM1638plus
+/*!
+	@file     TM1638plus_TEST_Model3.ino
+	@author   Gavin Lyons
+	@brief
+		 demo file library for  TM1638 module(8 bicolour green and red LEDs & 8 pushbuttons). 
+	@note
+		 Called Model 3 in this library.  This model is labelled LKM1638 or tm1638 v1.3
+		Carries out series of tests demonstrating arduino library TM1638plus.
+	@test
+		-# Test 0 Reset
+		-# Test 1 Brightness
+		-# Test 2 ASCII display
+		-# Test 3 Set a single segment
+		-# Test 4 Hex digits
+		-# Test 5 Text String with Decimal point
+		-# Test 6 TEXT + ASCII combo
+		-# Test 7 Integer Decimal number
+		-# Test 8 Text String + Float
+		-# Test 9 Text String + decimal number
+		-# Test 10 Multiple dots
+		-# Test 11 Display Overflow
+		-# Test 12 Scrolling text
+		-# Test 13 Green + red LEDS, setLED and setLEDs functions.
+		-# Test 14 Buttons + LEDS
 */
 
-#include <TM1638plus.h>
+#include <TM1638plus_Model3.h>
 
 // GPIO I/O pins on the Arduino connected to strobe, clock, data,
 //pick on any I/O you want.
-#define  STROBE_TM 4
-#define  CLOCK_TM 6
-#define  DIO_TM 7
+#define  STROBE_TM 4 // strobe = GPIO connected to strobe line of module
+#define  CLOCK_TM 6  // clock = GPIO connected to clock line of module
+#define  DIO_TM 7 // data = GPIO connected to data line of module
 
 bool high_freq = false; //default false,, If using a high freq CPU > ~100 MHZ set to true. 
 
 //Constructor object (GPIO STB , GPIO CLOCK , GPIO DIO, use high freq MCU default false)
-TM1638plus tm(STROBE_TM, CLOCK_TM , DIO_TM, high_freq);
+TM1638plus_model3 tm(STROBE_TM, CLOCK_TM , DIO_TM, high_freq);
 
 
 // Some vars and defines for the tests.
 #define myTestDelay  5000
 #define myTestDelay1 1000
+#define myTestDelay3 3000
 uint8_t  testcount = 1;
 
 
@@ -103,42 +101,52 @@ void Test1() {
 void Test2() {
   //Test 2 ASCII display 2.342
 
-  tm.displayASCIIwDot(0, '2');
-  tm.displayASCII(1, '3');
-  tm.displayASCII(2, '4');
-  tm.displayASCII(3, '2');
-  delay(myTestDelay);
+  tm.displayASCII(0, '2', tm.DecPointOn);
+  tm.displayASCII(1, '3', tm.DecPointOff);
+  tm.displayASCII(2, '4', tm.DecPointOff);
+  tm.displayASCII(3, '2', tm.DecPointOff);
+  delay(myTestDelay3);
   tm.reset();
 }
 
 void Test3() {
-  //TEST 3 single segment (pos, (dp)gfedcba)
-  //In this case  segment g (middle dash) of digit position 7
-  tm.display7Seg(7, 0b01000000);
-  delay(myTestDelay);
+  //TEST 3 single segment (digit position, (dp)gfedcba)
+  // (dp)gfedcba =  seven segments positions
+  uint8_t pos = 0;
+  for (pos = 0 ; pos<8 ; pos++)
+  {
+    tm.display7Seg(pos, 1<<(7-pos)); // Displays a single seg in (dp)gfedcba) in each  pos 0-7
+    delay(myTestDelay1);
+  }
 }
 
 void Test4() {
   // Test 4 Hex digits.
-  tm.displayHex(0, 1);
-  tm.displayHex(1, 2);
-  tm.displayHex(2, 3);
-  tm.displayHex(3, 4);
-  tm.displayHex(4, 5);
-  tm.displayHex(5, 6);
-  tm.displayHex(6, 7);
-  tm.displayHex(7, 8);
-  delay(myTestDelay);
+  tm.displayHex(0, 0);
+  tm.displayHex(1, 1);
+  tm.displayHex(2, 2);
+  tm.displayHex(3, 3);
+  tm.displayHex(4, 4);
+  tm.displayHex(5, 5);
+  tm.displayHex(6, 6);
+  tm.displayHex(7, 7);
+  delay(myTestDelay3);
 
   tm.displayHex(0, 8);
   tm.displayHex(1, 9);
-  tm.displayHex(2, 10);
-  tm.displayHex(3, 11);
-  tm.displayHex(4, 12);
-  tm.displayHex(5, 13);
-  tm.displayHex(6, 14);
-  tm.displayHex(7, 15);
-  delay(myTestDelay);
+  tm.displayHex(2, 0x0A);
+  tm.displayHex(3, 0x0B);
+  tm.displayHex(4, 0x0C);
+  tm.displayHex(5, 0x0D);
+  tm.displayHex(6, 0x0E);
+  tm.displayHex(7, 0x0F);
+  delay(myTestDelay3);
+
+  tm.reset();
+
+  tm.displayHex(1, 0xFE);
+  tm.displayHex(7, 0x10);
+  delay(myTestDelay3); // display " E      0"
 }
 
 void Test5() {
@@ -153,27 +161,42 @@ void Test6() {
   // ADC=.2.541
   char text1[] = "ADC=.";
   tm.displayText(text1);
-  tm.displayASCIIwDot(4, '2');
-  tm.displayASCII(5, '5');
-  tm.displayASCII(6, '4');
-  tm.displayASCII(7, '1');
-  delay(myTestDelay);
+  tm.displayASCII(4, '2', tm.DecPointOn);
+  tm.displayASCII(5, '5', tm.DecPointOff);
+  tm.displayASCII(6, '4', tm.DecPointOff);
+  tm.displayASCII(7, '1', tm.DecPointOff);
+  delay(myTestDelay3);
   tm.reset();
 }
 
 void Test7() {
-  // TEST 7a Integer
-  tm.displayIntNum(72, false); // "72      "
+  // TEST 7a Integer left aligned , NO leading zeros 
+  tm.displayIntNum(45, false, TMAlignTextLeft); // "45      "
   delay(myTestDelay);
-  // TEST 7b Integer
-  tm.displayIntNum(92345, true); // "00092345"
+  // TEST 7b Integer left aligned , leading zeros 
+  tm.displayIntNum(99991, true, TMAlignTextLeft); // "00099991"
   delay(myTestDelay);
   tm.reset();
-  // TEST 7b tm.DisplayDecNumNIbble
-  tm.DisplayDecNumNibble(1488, 5678, false); // "14885678"
+  // TEST 7c Integer right aligned , NO leading zeros 
+  tm.displayIntNum(35, false, TMAlignTextRight); // "      35"
   delay(myTestDelay);
-  tm.DisplayDecNumNibble(123, 998, true); // "01230998"
+  // TEST 7d Integer right aligned , leading zeros 
+  tm.displayIntNum(9983551, true, TMAlignTextRight); // "09983551"
   delay(myTestDelay);
+
+  // TEST 7e tm.DisplayDecNumNIbble left aligned
+  tm.DisplayDecNumNibble(134, 70, false, TMAlignTextLeft); // "134 " "70" , left aligned, NO leading zeros
+  delay(myTestDelay);
+  tm.DisplayDecNumNibble(23, 662, true, TMAlignTextLeft); // "0023" "0662" , left aligned , leading zeros
+  delay(myTestDelay);
+  tm.reset();
+
+  // TEST 7f tm.DisplayDecNumNIbble right aligned
+  tm.DisplayDecNumNibble(43, 991, false, TMAlignTextRight); // "  43" " 991" , right aligned, NO leading zeros
+  delay(myTestDelay);
+  tm.DisplayDecNumNibble(53, 8, true, TMAlignTextRight); // "0053" "0008" , right aligned , leading zeros
+  delay(myTestDelay3);
+
 }
 
 void Test8() {
@@ -182,7 +205,7 @@ void Test8() {
   uint16_t  data = 294;
   sprintf(workStr, "ADC=.%04d", data); // "ADC=.0294"
   tm.displayText(workStr);
-  delay(myTestDelay);
+  delay(myTestDelay3);
 }
 
 void Test9() {
@@ -200,7 +223,7 @@ void Test9() {
 
   sprintf(workStr, "ADC=.%d%d.%d%d", digit1, digit2, digit3, digit4);
   tm.displayText(workStr); //12.45.VOLT
-  delay(myTestDelay);
+  delay(myTestDelay3);
   tm.reset();
 }
 
@@ -208,16 +231,16 @@ void Test10()
 {
   //TEST 10 Multiple dots test
   tm.displayText("Hello...");
-  delay(myTestDelay);
+  delay(myTestDelay3);
   tm.displayText("...---..."); //SOS in morse
-  delay(myTestDelay);
+  delay(myTestDelay3);
 }
 
 void Test11()
 {
   //TEST11 user overflow
   tm.displayText("1234567890abc"); //should display just 12345678
-  delay(myTestDelay);
+  delay(myTestDelay3);
   tm.reset();
 }
 
@@ -227,11 +250,11 @@ void Test12() {
     char textScroll[17] = " Hello world 123";
   unsigned long previousMillis_display = 0;  // will store last time display was updated
   const long interval_display = 1000;            //   interval at which to update display (milliseconds)
-
   while(1)
   {
   tm.displayText(textScroll);
   unsigned long currentMillis = millis();
+   yield(); // Added to prevent ESP8266 crash.
   if (currentMillis - previousMillis_display >= interval_display)
   {
     previousMillis_display = currentMillis;
@@ -256,16 +279,16 @@ void Test13()
 
   // Test 13A Turn on green leds with setLED
   for (LEDposition = 0; LEDposition < 8; LEDposition++) {
-    tm.setLED(LEDposition, TM_GREEN_LED);
+    tm.setLED(LEDposition, tm.TM_GREEN_LED);
     delay(500);
-    tm.setLED(LEDposition, TM_OFF_LED);
+    tm.setLED(LEDposition, tm.TM_OFF_LED);
   }
 
   // Test 13b turn on red LEDs with setLED
   for (LEDposition = 0; LEDposition < 8; LEDposition++) {
-    tm.setLED(LEDposition, TM_RED_LED);
+    tm.setLED(LEDposition, tm.TM_RED_LED);
     delay(500);
-    tm.setLED(LEDposition, TM_OFF_LED);
+    tm.setLED(LEDposition, tm.TM_OFF_LED);
   }
 
   // TEST 13c 
@@ -278,18 +301,18 @@ void Test13()
   // Shows on display as  LED1-LED8 turns on RRRXXGGG as LED 8 is on right hand side.
    
   tm.setLEDs(0xE007); //L1-L8 turns on RRRXXGGG on display
-  delay(3000);
+  delay(myTestDelay3);
   
   tm.setLEDs(0xF00F); // L1-L8 turns on RRRRGGGG on display
-  delay(3000);
+  delay(myTestDelay3);
   tm.setLEDs(0xFE01); // L1-L8 turns on RGGGGGGG on display
-  delay(3000);
+  delay(myTestDelay3);
   tm.setLEDs(0x00FF); //all red   RRRRRRR
-  delay(3000);
+  delay(myTestDelay3);
   tm.setLEDs(0xFF00); //all green GGGGGGG
-  delay(3000);
+  delay(myTestDelay3);
   tm.setLEDs(0x0000); //all off
-  delay(3000);
+  delay(myTestDelay3);
 
 }
 
@@ -326,5 +349,5 @@ void Serialinit()
 {
   Serial.begin(9600);
   delay(100);
-  Serial.println("--Comms UP--TM1638plus_TEST_Model1.ino--");
+  Serial.println("--Comms UP--TM1638plus_TEST_Model3.ino--");
 }
